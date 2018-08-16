@@ -18,7 +18,7 @@ class MakeServiceCommand extends ServicestCommand
      *
      * @var string
      */
-    protected $description = 'Create a new service class';
+    protected $description = 'Create a new service library class';
 
     /**
      * Stubs
@@ -72,25 +72,26 @@ class MakeServiceCommand extends ServicestCommand
      */
     protected function testController() : void
     {
-        $controller = $this->namespace.'Http/Controllers/'.$this->argument('controller');
+        $controller = $this->namespace.$this->controllerNamespace.$this->argument('controller');
         $this->controller = str_replace('/', '\\', $controller);
         if ($this->laravel->runningInConsole()) {
             // Controller does not exists
-            if (!class_exists($this->controller)) {
+            if (!class_exists($this->controller.$this->argumentExtension)) { // Append the 'Controller' suffix for path checking
                 $response = $this->ask("Controller [{$this->controller}] does not exist. Would you like to create it?", 'Yes');
                 if ($this->isResponsePositive($response)) {
                     Artisan::call('make:controller', [
-                        'name' => $this->controller,
+                        'name' => $this->controller.$this->argumentExtension,
                     ]);
-                    $this->line("Model [{$this->controller}] has been successfully created.");
+                    $this->line("Controller [{$this->controller}] has been successfully created.");
                 } else {
-                    $this->line("Model [{$this->controller}] is not being created.");
+                    $this->line("Failed to create controller [{$this->controller}].");
                 }
             }
         }
 
         $controllerParts = explode('\\', $this->controller);
         $this->controllerName = array_pop($controllerParts);
+        \Log::debug($this->controllerName);
     }
 
     /**

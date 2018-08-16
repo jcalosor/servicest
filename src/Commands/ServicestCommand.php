@@ -20,6 +20,19 @@ class ServicestCommand extends Command
     protected $file;
 
     /**
+     * Default namespace / location of argument Controller
+     * @var string
+     */
+    protected $controllerNamespace;
+
+    /**
+     * Default extension to identify the argument type
+     * default: Controller
+     * @var string
+     */
+    protected $argumentExtension;
+
+    /**
      * Create a new command instance.
      *
      * @return void
@@ -30,6 +43,8 @@ class ServicestCommand extends Command
 
         $this->file = app('files');
         $this->namespace = app()->getNamespace();
+        $this->controllerNamespace = 'Http/Controllers/';
+        $this->argumentExtension = 'Controller';
     }
 
     /**
