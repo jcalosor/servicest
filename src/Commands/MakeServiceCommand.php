@@ -11,7 +11,9 @@ class MakeServiceCommand extends ServicestCommand
      *
      * @var string
      */
-    protected $signature = 'make:service {controller}';
+    protected $signature = 'make:service 
+                            {controller : The name of the class corresponding to an existing controller class [ Must be an existing controller class ]} 
+                            {--r|resource : Generate a resource controller class}';
 
     /**
      * The console command description.
@@ -79,9 +81,8 @@ class MakeServiceCommand extends ServicestCommand
             if (!class_exists($this->controller.$this->argumentExtension)) { // Append the 'Controller' suffix for path checking
                 $response = $this->ask("Controller [{$this->controller}] does not exist. Would you like to create it?", 'Yes');
                 if ($this->testResponse($response)) {
-                    Artisan::call('make:controller', [
-                        'name' => $this->controller.$this->argumentExtension,
-                    ]);
+                    // Place the Artisan:call() here
+                    $this->mock('make:controller', $this->controller.$this->argumentExtension);
                     $this->line("Controller [{$this->controller}] has been successfully created.");
                 } else {
                     $this->line("Failed to create controller [{$this->controller}].");
@@ -125,5 +126,22 @@ class MakeServiceCommand extends ServicestCommand
         }
         $this->line("The service [{$fileName}] has been created.");
         $this->file->put($filePath, $content);
+    }
+    
+    /**
+     * Mock Artisan function ::call()
+     *
+     * @param String $command
+     * @param String $argument
+     * @param Array $option
+     * @return void
+     */
+    final protected function mock(String $command, String $argument) : void
+    {
+        $command = (isset($command)) ? $command : 'make:controller';
+        $parameters = [];
+        $parameters['name'] = (isset($argument)) ? $argument : 'Base';
+        $parameters['--resource'] = ($this->option('resource')) ? true : false;
+        Artisan::call($command, $parameters);
     }
 }
