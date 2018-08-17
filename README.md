@@ -1,2 +1,2 @@
 # Servicest
-Laravel 5.6^ Service classes generator
+Laravel 5.6 Services class generator
