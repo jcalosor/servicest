@@ -19,5 +19,10 @@
         "psr-4": {
             "JCalosor\\Servicest\\": "src/"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.0-dev"
+        }
     }
 }
