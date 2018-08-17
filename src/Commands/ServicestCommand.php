@@ -57,4 +57,15 @@ class ServicestCommand extends Command
     {
         return config('servicest.'.$key);
     }
+
+    /**
+     * Determine if the user input is positive.
+     * 
+     * @param  string
+     * @return boolean
+     */
+    public function testResponse($response)
+    {
+    	return in_array(strtolower($response), ['y', 'yes']);
+    }
 }

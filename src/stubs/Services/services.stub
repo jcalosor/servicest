@@ -2,7 +2,7 @@
 
 namespace %namespaces.services%;
 
-class %controller%Service
+class %controllerName%Service
 {
    // 
 }

@@ -78,7 +78,7 @@ class MakeServiceCommand extends ServicestCommand
             // Controller does not exists
             if (!class_exists($this->controller.$this->argumentExtension)) { // Append the 'Controller' suffix for path checking
                 $response = $this->ask("Controller [{$this->controller}] does not exist. Would you like to create it?", 'Yes');
-                if ($this->isResponsePositive($response)) {
+                if ($this->testResponse($response)) {
                     Artisan::call('make:controller', [
                         'name' => $this->controller.$this->argumentExtension,
                     ]);
@@ -91,7 +91,6 @@ class MakeServiceCommand extends ServicestCommand
 
         $controllerParts = explode('\\', $this->controller);
         $this->controllerName = array_pop($controllerParts);
-        \Log::debug($this->controllerName);
     }
 
     /**
@@ -119,7 +118,7 @@ class MakeServiceCommand extends ServicestCommand
         }
         if ($this->laravel->runningInConsole() && $this->file->exists($filePath)) {
             $response = $this->ask("The service [{$fileName}] already exists. Do you want to overwrite it?", 'Yes');
-            if (!$this->isResponsePositive($response)) {
+            if (!$this->testResponse($response)) {
                 $this->line("The service [{$fileName}] will not be overwritten.");
                 return;
             }
