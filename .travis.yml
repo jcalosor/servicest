@@ -1,0 +1,8 @@
+language: php
+deploy:
+  provider: releases
+  api_key: "bf472aeda445127e8b18a588bd74bb5f9ca6ed0a"
+  file: "Source Code (zip)"
+  skip_cleanup: true
+  on:
+    tags: true
