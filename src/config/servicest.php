@@ -10,6 +10,6 @@ return [
      * Paths will be used with the `app()->basePath().'/app/'` function to reach app directory.
      */
     'paths' => [
-        'services'    => 'Libraries/Services/'
+        'services'    => 'Services/'
     ],
 ];
