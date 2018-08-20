@@ -1,4 +1,15 @@
 language: php
+
+php:
+  - 7.2.8
+
+before_script:
+  - composer self-update
+  - composer install --no-interaction
+  
+script:
+  - vendor/bin/phpunit
+  
 deploy:
   provider: releases
   api_key: "bf472aeda445127e8b18a588bd74bb5f9ca6ed0a"
