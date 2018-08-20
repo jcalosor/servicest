@@ -1,6 +1,5 @@
 {
     "name": "jcalosor/servicest",
-    "version": "0.1.0",
     "description": "Laravel 5.6 Services class generator",
     "type": "library",
     "license": "MIT",
