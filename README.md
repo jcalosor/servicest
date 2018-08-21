@@ -8,7 +8,6 @@ Laravel 5.6 Services class generator
 <a href="https://packagist.org/packages/jcalosor/servicest"><img src="https://poser.pugx.org/jcalosor/servicest/license.svg" alt="License"></a>
 </p>
 
-
 ## Installation
 
 ### Step 1: Execute composer
