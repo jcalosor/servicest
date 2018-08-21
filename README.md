@@ -1,9 +1,12 @@
 # Servicest
 Laravel 5.6 Services class generator
 
-[![Latest Stable Version](https://poser.pugx.org/jcalosor/servicest/v/stable)](https://packagist.org/packages/jcalosor/servicest)
-[![Latest Unstable Version](https://poser.pugx.org/jcalosor/servicest/v/unstable)](https://packagist.org/packages/jcalosor/servicest)
-[![License](https://poser.pugx.org/jcalosor/servicest/license)](https://packagist.org/packages/jcalosor/servicest)
+<p>
+<a href="https://travis-ci.com/jcalosor/servicest"><img src="https://travis-ci.com/jcalosor/servicest.svg?branch=master" alt="build:passed"></a>
+<a href="https://packagist.org/packages/jcalosor/servicest"><img src="https://poser.pugx.org/jcalosor/servicest/v/stable.svg" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/jcalosor/servicest"><img src="https://poser.pugx.org/jcalosor/servicest/v/unstable.svg" alt="Latest Unstable Version"></a>
+<a href="https://packagist.org/packages/jcalosor/servicest"><img src="https://poser.pugx.org/jcalosor/servicest/license.svg" alt="License"></a>
+</p>
 
 
 ## Installation
