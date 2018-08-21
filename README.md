@@ -13,14 +13,20 @@ Laravel 5.6 Services class generator
 composer require jcalosor/servicest
 ```
 
-### Step 2: Publish the configuration file
-**Note:** _Make sure you are inside the laravel directory first, then run_
+### Step 2: While in the  laravel directory, edit the config/app.php file
+_Add the following code._
+```
+JCalosor\Servicest\ServicestServiceProvider::class
+```
+
+### Step 3: Publish the configuration file
+**Note:** _Make sure you are inside the laravel directory first, then run._
 ```
 php artisan vendor:publish --tag=servicest-config
 ```
 
-### Step 3: Verify the install
-**Note:** _Again the laravel directory, run_
+### Step 4: Verify the install
+**Note:** _Again the in laravel directory, run._
 ```
 php artisan
 ```
