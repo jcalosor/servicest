@@ -39,6 +39,13 @@ class MakeServiceCommand extends ServicestCommand
     protected $controllerName;
 
     /**
+     * Defined model namespace
+     *
+     * @var string
+     */
+    protected $model;
+
+    /**
      * Create a new command instance.
      *
      * @return void
@@ -97,8 +104,25 @@ class MakeServiceCommand extends ServicestCommand
     protected function buildModel(): void
     {
         // Same as the controller's name
-        $model = $this->controllerName;
-        $this->mock('model', $model);
+        $model = $this->namespace.$this->argument('controller');
+        $this->model = str_replace('/', '\\', $model);
+        if ($this->laravel->runningInConsole()) {
+            // Model does not exists
+            if (!class_exists($this->model)) {
+                $response = $this->ask("Model [{$this->model}] does not exist. Would you like to create it?", 'Yes');
+                if ($this->rateResponse($response)) {
+                    // Build the controller by mocking the Artisan::call()
+                    $this->mock('model', $this->model);
+                    $this->line("Model [{$this->model}] has been successfully created.");
+                } else {
+                    $this->line("Model [{$this->model}] does not get created.");
+                }
+            }
+        }
+
+        $modelParts = explode('\\', $this->model);
+        $this->modelName = array_pop($modelParts);
+        
     }
 
     /**
@@ -142,7 +166,7 @@ class MakeServiceCommand extends ServicestCommand
         $replacements = [
             '%controller%'                   => $this->controller,
             '%serviceName%'                  => $this->controllerName,
-            '%modelName%'                    => $this->controllerName,
+            '%modelName%'                    => $this->modelName,
             '%namespaces.services%'          => $this->namespace.$this->config('namespaces.services')
         ];
         $content = str_replace(array_keys($replacements), array_values($replacements), $content);
