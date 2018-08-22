@@ -2,7 +2,9 @@
 
 namespace %namespaces.services%;
 
-class %controllerName%Service
+use App\%modelName%;
+
+class %serviceName%Service
 {
    // 
 }

@@ -13,7 +13,8 @@ class MakeServiceCommand extends ServicestCommand
      */
     protected $signature = 'make:service 
                             {controller : The name of the class corresponding to an existing controller class [ Must be an existing controller class ]} 
-                            {--r|resource : Generate a resource controller class}';
+                            {--r|resource : Generate a resource controller class}
+                            {--m|model : Generate a model class}';
 
     /**
      * The console command description.
@@ -22,14 +23,6 @@ class MakeServiceCommand extends ServicestCommand
      */
     protected $description = 'Create a new service library class';
 
-    /**
-     * Stubs
-     *
-     * @var array
-     */
-    protected $stubs = [
-        'service' => __DIR__.'/../stubs/Services/services.stub'
-    ];
 
     /**
      * Defined namespace path
@@ -62,17 +55,59 @@ class MakeServiceCommand extends ServicestCommand
      */
     public function handle()
     {
-        $this->testController();
-        $this->createService();
+        $this->executeBuild();
+        $this->buildService();
     }
 
     /**
-     * Test Controller
+     * Build Class function
+     * @final 
+     * @return void
+     */
+    final protected function executeBuild(): void
+    {
+        // Mandatory build the controller
+        $this->buildController();
+
+        if($this->option('model')){
+            $this->buildModel();
+        }
+    }
+
+    /**
+     * Get Stub
+     *
+     * @return String
+     */
+    protected function getStub(): String
+    {
+        $stub = null;
+        if($this->option('model')){
+           $stub = $this->stubs.'/service.model.stub'; 
+        }
+        $stub = $stub ?? $this->stubs.'/service.plain.stub';
+        return $stub;
+    }
+
+    /**
+     * Build Model function
+     * 
+     * @return void
+     */
+    protected function buildModel(): void
+    {
+        // Same as the controller's name
+        $model = $this->controllerName;
+        $this->mock('model', $model);
+    }
+
+    /**
+     * Append Controller
      * Check if a corresponding controller is existing,
      * Create if needed
      * @return void
      */
-    protected function testController() : void
+    protected function buildController(): void
     {
         $controller = $this->namespace.$this->controllerNamespace.$this->argument('controller');
         $this->controller = str_replace('/', '\\', $controller);
@@ -80,12 +115,12 @@ class MakeServiceCommand extends ServicestCommand
             // Controller does not exists
             if (!class_exists($this->controller.$this->argumentExtension)) { // Append the 'Controller' suffix for path checking
                 $response = $this->ask("Controller [{$this->controller}] does not exist. Would you like to create it?", 'Yes');
-                if ($this->testResponse($response)) {
-                    // Place the Artisan:call() here
-                    $this->mock('make:controller', $this->controller.$this->argumentExtension);
+                if ($this->rateResponse($response)) {
+                    // Build the controller by mocking the Artisan::call()
+                    $this->mock('controller', $this->controller.$this->argumentExtension);
                     $this->line("Controller [{$this->controller}] has been successfully created.");
                 } else {
-                    $this->line("Failed to create controller [{$this->controller}].");
+                    $this->line("Controller [{$this->controller}] does not get created.");
                 }
             }
         }
@@ -95,19 +130,20 @@ class MakeServiceCommand extends ServicestCommand
     }
 
     /**
-     * Create Service
+     * Build Service
      * The process of creating the Service
      * Requires an existing controller by 'default'
      *
      * @return void
      */
-    protected function createService() : void
+    protected function buildService(): void
     {
-        $content = $this->file->get($this->stubs['service']);
+        $content = $this->file->get($this->getStub());
         $replacements = [
             '%controller%'                   => $this->controller,
-            '%controllerName%'               => $this->controllerName,
-            '%namespaces.services%'          => $this->namespace.$this->config('namespaces.services'),
+            '%serviceName%'                  => $this->controllerName,
+            '%modelName%'                    => $this->controllerName,
+            '%namespaces.services%'          => $this->namespace.$this->config('namespaces.services')
         ];
         $content = str_replace(array_keys($replacements), array_values($replacements), $content);
         $fileName = $this->controllerName.'Service';
@@ -119,7 +155,7 @@ class MakeServiceCommand extends ServicestCommand
         }
         if ($this->laravel->runningInConsole() && $this->file->exists($filePath)) {
             $response = $this->ask("The service [{$fileName}] already exists. Do you want to overwrite it?", 'Yes');
-            if (!$this->testResponse($response)) {
+            if (!$this->rateResponse($response)) {
                 $this->line("The service [{$fileName}] will not be overwritten.");
                 return;
             }
@@ -130,18 +166,23 @@ class MakeServiceCommand extends ServicestCommand
     
     /**
      * Mock Artisan function ::call()
-     *
+     * @uses Artisan::call Anonymous
      * @param String $command
      * @param String $argument
-     * @param Array $option
      * @return void
      */
-    final protected function mock(String $command, String $argument) : void
+    final protected function mock(String $command, String $argument): void
     {
-        $command = (isset($command)) ? $command : 'make:controller';
+        $base = 'make:';
         $parameters = [];
+        switch($command){
+            case 'controller':
+                $parameters['--resource'] = ($this->option('resource')) ? true : false;
+            break;
+        }
+        $command = (isset($command)) ? $base.$command : $base.'controller';
         $parameters['name'] = (isset($argument)) ? $argument : 'Base';
-        $parameters['--resource'] = ($this->option('resource')) ? true : false;
+
         Artisan::call($command, $parameters);
     }
 }

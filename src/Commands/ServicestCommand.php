@@ -33,6 +33,11 @@ class ServicestCommand extends Command
     protected $argumentExtension;
 
     /**
+     * Path to stubs resource
+     */
+    protected $stubs = __DIR__.'/../stubs';
+
+    /**
      * Create a new command instance.
      *
      * @return void
@@ -64,7 +69,7 @@ class ServicestCommand extends Command
      * @param  string
      * @return boolean
      */
-    public function testResponse($response)
+    public function rateResponse($response)
     {
     	return in_array(strtolower($response), ['y', 'yes']);
     }
