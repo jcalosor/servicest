@@ -20,7 +20,7 @@ class ServicestCommand extends Command
     protected $file;
 
     /**
-     * Default extension to identify the argument type
+     * Suggestive extension to identify the controller class
      * 
      * @example Controller Default
      * @var string
@@ -39,6 +39,14 @@ class ServicestCommand extends Command
      * @var string
      */
     protected $controllerPath;
+
+    /**
+     * Suggestive extension to identify the model class
+     * 
+     * @example Model Custom
+     * @var string
+     */
+    protected $modelExtenstion;
 
     /**
      * Path for models

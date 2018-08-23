@@ -69,8 +69,9 @@ class MakeServiceCommand extends ServicestCommand
      */
     public function handle()
     {
-        $this->executeBuild();
-        $this->buildService();
+        // Build Controller or Model first,
+        // Build the service last
+        $this->executeBuild()->buildService();
     }
 
     /**
@@ -78,7 +79,7 @@ class MakeServiceCommand extends ServicestCommand
      * @final 
      * @return void
      */
-    final protected function executeBuild(): void
+    final protected function executeBuild(): object 
     {
         // Mandatory build the controller
         $this->buildController();
@@ -86,6 +87,8 @@ class MakeServiceCommand extends ServicestCommand
         if($this->option('model')){
             $this->buildModel();
         }
+
+        return $this;
     }
 
     /**
@@ -117,11 +120,11 @@ class MakeServiceCommand extends ServicestCommand
         $this->model = str_replace('/', '\\', $path);
         if ($this->laravel->runningInConsole()) {
             // Model does not exists
-            if (!class_exists($this->model)) {
+            if (!class_exists($this->model.$this->modelExtenstion)) {
                 $response = $this->ask("Model [{$this->model}] does not exist. Would you like to create it?", 'Yes');
                 if ($this->rateResponse($response)) {
                     // Build the controller by mocking the Artisan::call()
-                    $this->mock('model', $this->model);
+                    $this->mock('model', $this->model.$this->modelExtenstion);
                     $this->line("Model [{$this->model}] has been successfully created.");
                 } else {
                     $this->line("Model [{$this->model}] does not get created.");
@@ -147,11 +150,11 @@ class MakeServiceCommand extends ServicestCommand
         $this->controller = str_replace('/', '\\', $path);
         if ($this->laravel->runningInConsole()) {
             // Controller does not exists
-            if (!class_exists($this->controller.$this->argumentExtension)) { // Append the 'Controller' suffix for path checking
+            if (!class_exists($this->controller.$this->controllerExtension)) { // Append the 'Controller' suffix for path checking
                 $response = $this->ask("Controller [{$this->controller}] does not exist. Would you like to create it?", 'Yes');
                 if ($this->rateResponse($response)) {
                     // Build the controller by mocking the Artisan::call()
-                    $this->mock('controller', $this->controller.$this->argumentExtension);
+                    $this->mock('controller', $this->controller.$this->controllerExtension);
                     $this->line("Controller [{$this->controller}] has been successfully created.");
                 } else {
                     $this->line("Controller [{$this->controller}] does not get created.");
