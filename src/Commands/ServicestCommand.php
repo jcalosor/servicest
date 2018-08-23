@@ -20,22 +20,33 @@ class ServicestCommand extends Command
     protected $file;
 
     /**
-     * Default namespace / location of argument Controller
-     * @var string
-     */
-    protected $controllerNamespace;
-
-    /**
      * Default extension to identify the argument type
-     * default: Controller
+     * 
+     * @example Controller Default
      * @var string
      */
-    protected $argumentExtension;
+    protected $controllerExtension;
 
     /**
      * Path to stubs resource
      */
     protected $stubs = __DIR__.'/../stubs';
+
+    /**
+     * Path for controllers
+     * 
+     * @example 'Http/Controllers/' Default
+     * @var string
+     */
+    protected $controllerPath;
+
+    /**
+     * Path for models
+     * 
+     * @example '' Default
+     * @var string
+     */
+    protected $modelPath;
 
     /**
      * Create a new command instance.
@@ -48,8 +59,10 @@ class ServicestCommand extends Command
 
         $this->file = app('files');
         $this->namespace = app()->getNamespace();
-        $this->controllerNamespace = 'Http/Controllers/';
-        $this->argumentExtension = 'Controller';
+        $this->controllerPath = $this->config('paths.controllers') ?? 'Http/Controllers/';
+        $this->controllerExtension = 'Controller';
+        $this->modelPath = $this->config('paths.models') ?? '';
+        
     }
 
     /**
@@ -66,7 +79,7 @@ class ServicestCommand extends Command
     /**
      * Determine if the user input is positive.
      * 
-     * @param  string
+     * @param string $response
      * @return boolean
      */
     public function rateResponse($response)

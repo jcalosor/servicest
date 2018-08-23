@@ -46,6 +46,13 @@ class MakeServiceCommand extends ServicestCommand
     protected $model;
 
     /**
+     * Undocumented variable
+     *
+     * @var [type]
+     */
+    protected $modelName;
+
+    /**
      * Create a new command instance.
      *
      * @return void
@@ -98,14 +105,16 @@ class MakeServiceCommand extends ServicestCommand
 
     /**
      * Build Model function
-     * 
+     * Check if a corresponding model is existing,
+     * Create if needed
      * @return void
      */
     protected function buildModel(): void
     {
-        // Same as the controller's name
-        $model = $this->namespace.$this->argument('controller');
-        $this->model = str_replace('/', '\\', $model);
+        // Default path
+        $path = $this->namespace.$this->modelPath.$this->argument('controller');
+        // Model namespace
+        $this->model = str_replace('/', '\\', $path);
         if ($this->laravel->runningInConsole()) {
             // Model does not exists
             if (!class_exists($this->model)) {
@@ -126,15 +135,16 @@ class MakeServiceCommand extends ServicestCommand
     }
 
     /**
-     * Append Controller
+     * Build Controller
      * Check if a corresponding controller is existing,
      * Create if needed
      * @return void
      */
     protected function buildController(): void
     {
-        $controller = $this->namespace.$this->controllerNamespace.$this->argument('controller');
-        $this->controller = str_replace('/', '\\', $controller);
+        $path = $this->namespace.$this->controllerPath.$this->argument('controller');
+        // Controller namespace
+        $this->controller = str_replace('/', '\\', $path);
         if ($this->laravel->runningInConsole()) {
             // Controller does not exists
             if (!class_exists($this->controller.$this->argumentExtension)) { // Append the 'Controller' suffix for path checking

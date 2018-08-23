@@ -1,15 +1,32 @@
 <?php
 return [
-    /**
-     * Namespaces are being prefixed with the applications base namespace.
-     */
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Default Namespaces Definitions
+    |--------------------------------------------------------------------------
+    |
+    | Servicest's namespaces that are being prefixed with the applications 
+    | base namespace.
+    | 
+    | Names: services
+    */
     'namespaces' => [
         'services'    => 'Libraries\Services'
     ],
-    /**
-     * Paths will be used with the `app()->basePath().'/app/'` function to reach app directory.
-     */
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Paths Definitions
+    |--------------------------------------------------------------------------
+    |
+    | Servicest's directory paths for corresponding generated files
+    | 
+    | Files: services, controllers, models
+    */
     'paths' => [
-        'services'    => 'Services/'
+        'services'    => 'Services/',
+        'controllers' => null,
+        'models'      => null
     ],
 ];
