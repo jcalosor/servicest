@@ -25,7 +25,7 @@ return [
     | Files: services, controllers, models
     */
     'paths' => [
-        'services'    => 'Services/',
+        'services'    => 'Libraries/Services/',
         'controllers' => null,
         'models'      => null
     ],

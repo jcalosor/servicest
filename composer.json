@@ -21,5 +21,12 @@
         "psr-4": {
             "JCalosor\\Servicest\\": "src/"
         }
-    }
+    },
+	"extra": {
+		"laravel": {
+			"providers": [
+                "JCalosor\\Servicest\\ServicestServiceProvider"
+			]
+		}
+	}
 }
